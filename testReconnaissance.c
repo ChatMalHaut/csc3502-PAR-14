@@ -113,7 +113,7 @@ char trouverLettre(int tabProp[],int bDD[][], int bDDAssos[])
 	    }
 	  else if (ecartActuel=ecartMinimal)
 	    {
-	      lettreProche[prop]= lettreProche[prop]*1000 + lettre ;
+	      lettreProche[prop]= lettreProche[prop]*27 + lettre ;
 	    }
 	}
     }
