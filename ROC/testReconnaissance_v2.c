@@ -99,7 +99,7 @@ char trouverLettre(int tabProp[],int bDD[][], char bDDAssos[])
   for(prop=0;prop<=15;prop++)
     {
       lettreProche[prop]= 0;
-  }
+    }
   for(prop=0;prop<16;prop++)
     {
       ecartMinimal = fabs(tabProp[prop]-bDD[prop][0]);
@@ -113,19 +113,32 @@ char trouverLettre(int tabProp[],int bDD[][], char bDDAssos[])
 	    }
 	  else if (ecartActuel=ecartMinimal)
 	    {
-	      lettreProche[prop]= lettreProche[prop]*1000 + lettre ;
+	      lettreProche[prop]= lettreProche[prop]*27 + lettre ; // En utilisant *1000 on risque un dépassement de mémoire 
 	    }
 	}
     }
 
   caractere = choixLettre(lettreProche, bDD[][], bDDAssos[]); // Va donner la colonne de bDD correspondant à la bonnne lettre.
-  return bDD[caractere];
+  return bDDAssos[caractere];
 }
 
 int choixLettre (int tab[], int bDD[][], char bDDAssos[])
 {
   int compteur=0;
   int i=0;
-  for (i=0;i<=15;i++){
-  }
+  int a=0;
+  int b=0;
+
+  for (i=0;i<=25;i++)
+    {
+      b=0;
+      a=tab[i];
+      while(a!=0)
+	{
+	  b=a/27;
+	  a=a-27*b;
+	  
+	  
+	}
+    }
 }
