@@ -2,7 +2,7 @@
 #include <stdio>
 #include <maths.h>
 
-//
+#define NB_LETTRES 26
 
 int main ( int argc, char *argv[] ) 
 {
@@ -44,8 +44,8 @@ int main ( int argc, char *argv[] )
 //La fonction qui va comparer l'image à la lettre
 void comparaison(Image imSource, int banqueDeDonnees[][])
 {
-  int tabProp[26];
-  Image tabImages[26];
+  int tabProp[16];
+  Image tabImages[16];
   int i=0;
   char lettre;
 
@@ -62,7 +62,7 @@ void comparaison(Image imSource, int banqueDeDonnees[][])
 
 
 //La fontion qui va découper le cadre de l'image en 16
-void decoupageCadre(Image cadre,Image tabImages[])
+void decoupageCadre(Image imLettre,Image tabImages[])
 {
   
 }
@@ -88,19 +88,19 @@ int trouverProportion(Image petitCarre)
   return(pNoirs/(petitCarre.nbLines * petitCarre.nbColumns));
 }
 
-char trouverLettre(int tabProp[],int bDD[][], char bDDAssos[])
+char trouverLettre(int tabProp[],int bDD[][], char bDDAssos[], Image imLettre)
 {
   int prop=0;
   int lettre=0;
   int ecartMinimal;
   int ecartActuel;
-  int lettreProche[26];
+  int lettreProche[16];
   int caractere;
-  for(prop=0;prop<26;prop++)
+  for(prop=0;prop<16;prop++)
     {
       lettreProche[prop]= 0;
     }
-  for(prop=0;prop<26;prop++)
+  for(prop=0;prop<16;prop++)
     {
       ecartMinimal = fabs(tabProp[prop]-bDD[prop][0]);
       for(lettre=1;lettre<=NB_LETTRES;lettre++)
@@ -113,20 +113,24 @@ char trouverLettre(int tabProp[],int bDD[][], char bDDAssos[])
 	    }
 	  else if (ecartActuel=ecartMinimal)
 	    {
-	      lettreProche[prop]= lettreProche[prop]*27 + lettre ; // En utilisant *1000 on risque un dépassement de mémoire 
+	      lettreProche[prop]= lettreProche[prop]*29 + lettre ; // En utilisant *1000 on risque un dépassement de mémoire 
 	    }
 	}
     }
 
-  caractere = choixLettre(lettreProche, bDD[][], bDDAssos[]); // Va donner la colonne de bDD correspondant à la bonnne lettre.
+  caractere = choixLettre(lettreProche, bDD[][], bDDAssos[], imLettre); // Va donner la colonne de bDD correspondant à la bonnne lettre.
   return bDDAssos[caractere];
 }
 
-int choixLettre (int tab[], int bDD[][], char bDDAssos[])
+
+
+
+
+int choixLettre (int tab[], int bDD[][], char bDDAssos[], Image imLettre)
 {
   //----------------------------------------------
   //Certaines de ces variables seront incorporées dans les fonctions plus tard
-  int compteur[26];
+  int compteur[NB_LETTRES];
   int i=0;
   int j=0;
   int a=0;
@@ -136,7 +140,7 @@ int choixLettre (int tab[], int bDD[][], char bDDAssos[])
 
   //----------------------------------------------
   //Fonction initTab
-  for(j=0;j<26;j++)
+  for(j=0;j<NB_LETTRES;j++)
     {      
       compteur[j]=0;
     }
@@ -144,15 +148,15 @@ int choixLettre (int tab[], int bDD[][], char bDDAssos[])
 
   //----------------------------------------------
   //Ici il faut mettre une fonction pour compter les correspondances
-  for (i=0;i<26;i++)
+  for (i=0;i<NB_LETTRES;i++)
     {
       a=tab[i];
       while(a!=0)
 	{
-	  b=a%27;
-	  a=(a-b)/27;
+	  b=a%29;
+	  a=(a-b)/29;
 	  b--;
-	  for(j=0;j<26;j++)
+	  for(j=0;j<NB_LETTRES;j++)
 	    {
 	      if(b==j)
 		{
@@ -166,12 +170,17 @@ int choixLettre (int tab[], int bDD[][], char bDDAssos[])
   //-----------------------------------------------
   //Ici il faut mettre une fonction maxTab
   m=compteur[0];
-  for(j=1;j<26;j++)
+  for(j=1;j<NB_LETTRES;j++)
     {
       if(m<compteur[j])
 	{
 	  m=compteur[j];
 	}
     }
+  //-----------------------------------------------
+
+  //-----------------------------------------------
+  //Ajouter la fonction qui, en cas de plusieurs correspondances maximales demande à l'utilisateur de choisir entre celles-ci (c'est là qu'on utilise bDDAssos et imLettre).
+
   //-----------------------------------------------
 }
