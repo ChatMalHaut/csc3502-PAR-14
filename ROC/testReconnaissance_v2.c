@@ -44,8 +44,8 @@ int main ( int argc, char *argv[] )
 //La fonction qui va comparer l'image à la lettre
 void comparaison(Image imSource, int banqueDeDonnees[][])
 {
-  int tabProp[16];
-  Image tabImages[16];
+  int tabProp[26];
+  Image tabImages[26];
   int i=0;
   char lettre;
 
@@ -94,13 +94,13 @@ char trouverLettre(int tabProp[],int bDD[][], char bDDAssos[])
   int lettre=0;
   int ecartMinimal;
   int ecartActuel;
-  int lettreProche[16];
+  int lettreProche[26];
   int caractere;
-  for(prop=0;prop<=15;prop++)
+  for(prop=0;prop<26;prop++)
     {
       lettreProche[prop]= 0;
     }
-  for(prop=0;prop<16;prop++)
+  for(prop=0;prop<26;prop++)
     {
       ecartMinimal = fabs(tabProp[prop]-bDD[prop][0]);
       for(lettre=1;lettre<=NB_LETTRES;lettre++)
@@ -124,21 +124,54 @@ char trouverLettre(int tabProp[],int bDD[][], char bDDAssos[])
 
 int choixLettre (int tab[], int bDD[][], char bDDAssos[])
 {
-  int compteur=0;
+  //----------------------------------------------
+  //Certaines de ces variables seront incorporées dans les fonctions plus tard
+  int compteur[26];
   int i=0;
+  int j=0;
   int a=0;
   int b=0;
+  int m=0;
+  //----------------------------------------------
 
-  for (i=0;i<=25;i++)
+  //----------------------------------------------
+  //Fonction initTab
+  for(j=0;j<26;j++)
+    {      
+      compteur[j]=0;
+    }
+  //----------------------------------------------
+
+  //----------------------------------------------
+  //Ici il faut mettre une fonction pour compter les correspondances
+  for (i=0;i<26;i++)
     {
-      b=0;
       a=tab[i];
       while(a!=0)
 	{
-	  b=a/27;
-	  a=a-27*b;
-	  
-	  
+	  b=a%27;
+	  a=(a-b)/27;
+	  b--;
+	  for(j=0;j<26;j++)
+	    {
+	      if(b==j)
+		{
+		  compteur[j]++;
+		}
+	    }
 	}
     }
+  //-----------------------------------------------
+
+  //-----------------------------------------------
+  //Ici il faut mettre une fonction maxTab
+  m=compteur[0];
+  for(j=1;j<26;j++)
+    {
+      if(m<compteur[j])
+	{
+	  m=compteur[j];
+	}
+    }
+  //-----------------------------------------------
 }
