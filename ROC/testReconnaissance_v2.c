@@ -29,7 +29,7 @@
 	  usleep ( 10000 );
 	  afficherImage ( ecran, &imSource );
 	  sleep ( 1 );
-	  lisserImage ( cote, imSource, &imDest, ecran );
+	  comparaison(imSource,banqueDeDonnees,ecran);
 	  sleep ( 3 );
 	  printf ( "\nEcriture fichier...\n" );
 	  ecrireImage ( imDest, argv[2] );
@@ -42,7 +42,7 @@
 	}
 
 	//La fonction qui va comparer l'image à la lettre
-	void comparaison(Image imSource, int banqueDeDonnees[][])
+void comparaison(Image imSource, int banqueDeDonnees[][],char banqueDeDonneeAsso, Ecran ecran)
 	{
 	  int tabProp[16];
 	  Image tabImages[16];
@@ -56,7 +56,7 @@
 		  tabProp[i]=trouverProportion(tabImage[i]);
 		}
 
-	  lettre=trouverLettre(tabProp,banqueDeDonnees);
+	  lettre=trouverLettre(tabProp,banqueDeDonnees,banqueDeDonneeAsso,ecran);
 	  printf("%c",&lettre);
 	}
 
@@ -112,7 +112,7 @@
 	  return(pNoirs/(petitCarre.nbLines * petitCarre.nbColumns));
 	}
 
-	char trouverLettre(int tabProp[],int bDD[][], char bDDAssos[], Image imLettre)
+char trouverLettre(int tabProp[],int bDD[][], char bDDAssos[], Image imLettre,Ecran ecran)
 	{
 	  int prop=0;
 	  int lettre=0;
@@ -155,11 +155,13 @@
 	  //----------------------------------------------
 	  //Certaines de ces variables seront incorporées dans les fonctions plus tard
 	  int compteur[NB_LETTRES];
+	  int casMultiple[NB_LETTRES];
 	  int i=0;
 	  int j=0;
 	  int a=0;
 	  int b=0;
-	  int m=0;
+	  int max=0;
+	  int choix;
 	  //----------------------------------------------
 
 	  //----------------------------------------------
@@ -176,35 +178,80 @@
 		{
 		  a=tab[i];
 		  while(a!=0)
-		{
-		  b=a%29;
-		  a=(a-b)/29;
-		  b--;
-		  for(j=0;j<NB_LETTRES;j++)
+		    {
+		      b=a%29;
+		      a=(a-b)/29;
+		      b--;
+		      for(j=0;j<NB_LETTRES;j++)
 			{
 			  if(b==j)
-			{
-			  compteur[j]++;
+			    {
+			      compteur[j]++;
+			    }
 			}
-			}
-		}
+		    }
 		}
 	  //-----------------------------------------------
 
 	  //-----------------------------------------------
 	  //Ici il faut mettre une fonction maxTab
-	  m=compteur[0];
+	  max=compteur[0];
+	  choix=1;
 	  for(j=1;j<NB_LETTRES;j++)
 		{
-		  if(m<compteur[j])
-		{
-		  m=compteur[j];
-		}
+		  if(max<compteur[j])
+		    {
+		      max=compteur[j];
+		      choix=1;
+		    }
+		  else if(max=compteur[j])
+		    {
+		      max=compteur[j];
+		      choix++;
+		    }
 		}
 	  //-----------------------------------------------
 
 	  //-----------------------------------------------
 	  //Ajouter la fonction qui, en cas de plusieurs correspondances maximales demande à l'utilisateur de choisir entre celles-ci (c'est là qu'on utilise bDDAssos et imLettre).
 
+	  if(choix!=1)
+	    {
+	      i=0;
+	      for(j=0;j<NB_LETTRES;j++)
+		{
+		  if(compteur[j]==max)
+		    {
+		      casMutliple[i]=j;
+		      i++;
+		    }
+		}
+	      casMultiple[i]=666;
+              printf("Oups, nous n'avons pas trouvé quelle est cette lettre :");
+	      afficherImage(ecran,&imLettre);
+	      printf("laquelle est-ce ?");
+	      j=0;
+	      while(casMultiple[j]!=666);
+	      {
+		a=casMultiple[j];
+		printf("%c \n",bDDAssos[a]);
+		a++;
+	      }
+	      char uChoix;
+	      scanf("%c",&uChoix);
+	      for(i=0;i<NB_LETTRES;i++)
+		{
+		  if(bDDAssos[i]==uChoix)
+		    {
+		      return(i);
+		    }
+		}
+      
+	    }
+	  else
+	    {
+	      return(max);
+	    }
+	    
 	  //-----------------------------------------------
 	}
