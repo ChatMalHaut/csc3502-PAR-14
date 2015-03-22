@@ -62,32 +62,80 @@ void comparaison(Image imSource, int banqueDeDonnees[][],char banqueDeDonneeAsso
 
 
 	//La fontion qui va découper le cadre de l'image en 16
+
 	void decoupageCadre(Image imLettre,Image tabImages[], int cote)
 	{
-		int compteur=0;
-		int i1=0;
-		int i2=0;
-		int i=0;
 		int j=0;
-		for (i1=0;i1<=15)
+		int i=0;
+		// Initialisation des Images
+		for (i=0;i<=15)
 		{
-			tabImages[i1].nbLines = (imLettre.nbLines)/4;		
-			tabImages[i1].nbColumns = (imLettre.nbColumnsl)/4;
-			for (i2=0; i2<= (imLettre.nbLines)/4)				// Il reste le cas où la taille de l'image n'est pas un multiple de 4 à gérer.
-			{
-			
-			}
+			tabImages[i].nbLines = (imLettre.nbLines)/4;					// Il reste à gérer le cas ou nbLines n'est pas divisible par 4.
+			tabImages[i].nbColumns = (imLettre.nbColumnsl)/4;
 		}
-		while (compteur <= taille)
-		{ for (i=0;i<= cote; i++)
-			{
-				for (j=0; j<= cote)
+		for (j=0;j<=15;j++)
+		{
+			remplirCadre(tabImages, tabImages[j], j, imLettre);
+		}
+	}
+		
+		// Remplissage des Images de tabImages
+	void remplirCadre(Image tabImages[], Image imSecante , int cadre, Image imLettre)	
+	{
+		int temp1 =0;
+		int temp2=0;
+		
+		if (cadre <= 3 )													// Les temp1  et temp2 vont permettre de situer imSecante dans imLettre.
+		{
+			temp1 = imSecante.nbColumns;
+			for (i=0;i<= imSecante.nbLines-1; i++)
 				{
-					tabImages[]->t2D[i][j]=imageimLettre->t2D[i][j]
+					for (j=0; j<= imSecante.nbColumns-1;j++)					
+					{
+						imSecante->t2D[i][j]= imLettre->t2D[i][temp1 + j];
+					}
+						
 				}
-				
-			}
-			compteur++;
+		}
+		if ((3 < cadre) && (cadre <= 7) )												// On réitère pour la deuxième ligne d'images coupées dans imLettre
+		{
+			temp1 = (cadre - 4)*imSecante.nbColumns;
+			temp2 = imSecante.nbLines;
+			for (i=0;i<= imSecante.nbLines-1; i++)
+				{
+					for (j=0; j<= imSecante.nbColumns-1;j++)					
+					{
+						imSecante->t2D[i][j]=imLettre->t2D[temp2 + i][temp1 + j];
+					}
+						
+				}
+		}
+		
+		if ((7 < cadre) && (cadre <= 11) )												// On réitère pour la troisième ligne d'images coupées dans imLettre
+		{
+			temp1 = (cadre - 8)*imSecante.nbColumns;
+			temp2 = 2*imSecante.nbLines;
+			for (i=0;i<= imSecante.nbLines-1; i++)
+				{
+					for (j=0; j<= imSecante.nbColumns-1;j++)					
+					{
+						imSecante->t2D[i][j]=imLettre->t2D[temp2 + i][temp1 + j];
+					}
+						
+				}
+		}
+		if ((11 < cadre) && (cadre <= 15) )												// On réitère pour la dernière ligne d'images coupées dans imLettre
+		{
+			temp1 = (cadre - 12)*imSecante.nbColumns;
+			temp2 = 3*imSecante.nbLines;
+			for (i=0;i<= imSecante.nbLines-1; i++)
+				{
+					for (j=0; j<= imSecante.nbColumns-1;j++)					
+					{
+						imSecante->t2D[i][j]=imLettre->t2D[temp2 + i][temp1 + j];
+					}
+						
+				}
 		}
 	}
 
