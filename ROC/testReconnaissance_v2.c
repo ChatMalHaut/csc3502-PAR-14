@@ -2,45 +2,6 @@
 	#include <stdio>
 	#include <maths.h>
 
-	#define NB_LETTRES 26
-
-	int main ( int argc, char *argv[] ) 
-	{
-	  Image imSource,imDest;
-	  int cote;
-	  Ecran ecran;
-	  
-	  if ( argc != 4 ) { 
-		fprintf ( stderr, "Usage : %s nomFichierSource nomFichierDest cote\n",
-			  argv[0] );
-		exit ( EXIT_FAILURE );
-	  }
-	  
-	  cote = atoi ( argv[3] );
-	  if ( cote%2 != 1 ) { 
-		fprintf ( stderr, "Le cote de la fenetre doit etre impair\n" );
-		exit ( EXIT_FAILURE );
-	  }
-			 
-	  imSource = lireImage ( argv[1] );
-
-	  ecran = initialiserAffichage ( imSource.nbColonnes,
-					 imSource.nbLignes, argv[1] );
-	  usleep ( 10000 );
-	  afficherImage ( ecran, &imSource );
-	  sleep ( 1 );
-	  comparaison(imSource,banqueDeDonnees,ecran);
-	  sleep ( 3 );
-	  printf ( "\nEcriture fichier...\n" );
-	  ecrireImage ( imDest, argv[2] );
-	  libererAffichage ( ecran );
-
-	  // desallocation memoire
-	  imSource.t2D = desallouer ( imSource.t2D );
-	  imDest.t2D=desallouer ( imDest.t2D );
-	  return EXIT_SUCCESS;
-	}
-
 	//La fonction qui va comparer l'image à la lettre
 void comparaison(Image imSource, int banqueDeDonnees[][],char banqueDeDonneeAsso, Ecran ecran)
 	{
@@ -168,10 +129,7 @@ char trouverLettre(int tabProp[],int bDD[][], char bDDAssos[], Image imLettre,Ec
 	  int ecartActuel;
 	  int lettreProche[16];
 	  int caractere;
-	  for(prop=0;prop<16;prop++)
-		{
-		  lettreProche[prop]= 0;
-		}
+	  initTab(lettreProche,16,0);
 	  for(prop=0;prop<16;prop++)
 		{
 		  ecartMinimal = fabs(tabProp[prop]-bDD[prop][0]);
@@ -201,27 +159,57 @@ char trouverLettre(int tabProp[],int bDD[][], char bDDAssos[], Image imLettre,Ec
 	int choixLettre (int tab[], int bDD[][], char bDDAssos[], Image imLettre)
 	{
 	  //----------------------------------------------
-	  //Certaines de ces variables seront incorporées dans les fonctions plus tard
 	  int compteur[NB_LETTRES];
-	  int casMultiple[NB_LETTRES];
-	  int i=0;
-	  int j=0;
-	  int a=0;
-	  int b=0;
 	  int max=0;
 	  int choix;
 	  //----------------------------------------------
 
 	  //----------------------------------------------
-	  //Fonction initTab
-	  for(j=0;j<NB_LETTRES;j++)
-		{      
-		  compteur[j]=0;
-		}
+	  initTab(compteur,NB_LETTRES,0);
 	  //----------------------------------------------
 
 	  //----------------------------------------------
-	  //Ici il faut mettre une fonction pour compter les correspondances
+	  correspondances(tab,compteur);
+	  //-----------------------------------------------
+
+	  //-----------------------------------------------
+	  maxTab(compteur,NB_LETTRES,&max,&choix);
+	  //-----------------------------------------------
+
+	  //-----------------------------------------------
+	  //Ajouter la fonction qui, en cas de plusieurs correspondances maximales demande à l'utilisateur de choisir entre celles-ci (c'est là qu'on utilise bDDAssos et imLettre).
+
+	  if(choix!=1)
+	    {
+	      return(choixFinal(compteur, max, ecran, imLettre, bDDAssos));     
+	    }
+	  else
+	    {
+	      return(max);
+	    }
+	    
+	  //-----------------------------------------------
+}
+
+
+
+void initTab(int tab[],int borne, int valeur)
+{
+  int i=0;
+  for(i=0;i<borne;i++)
+     {      
+       tab[i]=valeur;
+     }
+}
+
+
+void correspondances(int tab[], int compteur[])
+{
+  int i=0;
+  int a=0;
+  int b=0;
+  int j=0;
+
 	  for (i=0;i<NB_LETTRES;i++)
 		{
 		  a=tab[i];
@@ -239,67 +227,61 @@ char trouverLettre(int tabProp[],int bDD[][], char bDDAssos[], Image imLettre,Ec
 			}
 		    }
 		}
-	  //-----------------------------------------------
+}
 
-	  //-----------------------------------------------
-	  //Ici il faut mettre une fonction maxTab
-	  max=compteur[0];
-	  choix=1;
-	  for(j=1;j<NB_LETTRES;j++)
-		{
-		  if(max<compteur[j])
-		    {
-		      max=compteur[j];
-		      choix=1;
-		    }
-		  else if(max=compteur[j])
-		    {
-		      max=compteur[j];
-		      choix++;
-		    }
-		}
-	  //-----------------------------------------------
 
-	  //-----------------------------------------------
-	  //Ajouter la fonction qui, en cas de plusieurs correspondances maximales demande à l'utilisateur de choisir entre celles-ci (c'est là qu'on utilise bDDAssos et imLettre).
+void maxTab(int tab[], int borne, int *max, int *nb)
+{
+  int i=0;
+  *max=tab[0];
+  choix=1;
+  for(i=1;i<borne;i++)
+	{
+       	  if(*max<tab[i])
+       	    {
+       	      *max=tab[i];
+       	      *choix=1;
+       	    }
+       	  else if(*max=tab[i])
+       	    {
+       	      *max=tab[i];
+       	      *choix=choix+1;
+       	    }
+        }
+}
 
-	  if(choix!=1)
-	    {
-	      i=0;
-	      for(j=0;j<NB_LETTRES;j++)
-		{
-		  if(compteur[j]==max)
-		    {
-		      casMutliple[i]=j;
-		      i++;
-		    }
-		}
-	      casMultiple[i]=666;
-              printf("Oups, nous n'avons pas trouvé quelle est cette lettre :");
-	      afficherImage(ecran,&imLettre);
-	      printf("laquelle est-ce ?");
-	      j=0;
-	      while(casMultiple[j]!=666);
-	      {
-		a=casMultiple[j];
-		printf("%c \n",bDDAssos[a]);
-		a++;
-	      }
-	      char uChoix;
-	      scanf("%c",&uChoix);
-	      for(i=0;i<NB_LETTRES;i++)
-		{
-		  if(bDDAssos[i]==uChoix)
-		    {
-		      return(i);
-		    }
-		}
-      
-	    }
-	  else
-	    {
-	      return(max);
-	    }
-	    
-	  //-----------------------------------------------
-	}
+int choixFinal(int compteur, int max, Ecran ecran, Image imSource, int bDDAssos[])
+{
+  int i=0;
+  int j=0;
+  int casMultiple[NB_LETTRES];
+  int a;
+  char uChoix;
+  for(j=0;j<NB_LETTRES;j++)
+     {
+       	  if(compteur[j]==max)
+       	    {
+       	      casMutliple[i]=j;
+       	      i++;
+       	    }
+     }
+     casMultiple[i]=666;
+     printf("Oups, nous n'avons pas trouvé quelle est cette lettre :")
+     afficherImage(ecran,&imLettre);
+     printf("laquelle est-ce ?");
+     j=0;
+     while(casMultiple[j]!=666);
+     {
+   	 a=casMultiple[j];
+       	 printf("%c \n",bDDAssos[a]);
+       	 a++;
+     }
+     scanf("%c",&uChoix);
+     for(i=0;i<NB_LETTRES;i++)
+    	{
+       	  if(bDDAssos[i]==uChoix)
+       	    {
+       	      return(i);
+       	    }
+       	}
+}
