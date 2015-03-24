@@ -2,6 +2,8 @@
 	#include <stdio>
 	#include <maths.h>
 
+#include "testReconnaissance_v2.h"
+
 	//La fonction qui va comparer l'image à la lettre
 void comparaison(Image imSource, int banqueDeDonnees[][],char banqueDeDonneeAsso, Ecran ecran)
 	{
