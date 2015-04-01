@@ -254,8 +254,7 @@ void maxTab(int tab[], int borne, int *max, int *nb)
     }
 }
 
-int choixFinal(int compteur, int max, Ecran ecran, Image imSource, int bDDAssos[])
-{
+int choixFinal(int compteur, int max, Ecran ecran, Image imSource, int bDDAssos[]){
   int i=0;
   int j=0;
   int casMultiple[NB_LETTRES];

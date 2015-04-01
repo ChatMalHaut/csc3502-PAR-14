@@ -1,24 +1,15 @@
 #include<stdlib.h>
 #include<stdio.h>
-#include 'testReconnaissance_v2.h'
-
+#include "testReconnaissance_v2.h"
+#include "image.h"
+#include "affichage.h"
+#include "tab2Ddynamique.h"
 int main ( int argc, char *argv[] ) 
 	{
 	  Image imSource,imDest;
 	  int cote;
 	  Ecran ecran;
 	  
-	  if ( argc != 4 ) { 
-		fprintf ( stderr, "Usage : %s nomFichierSource nomFichierDest cote\n",
-			  argv[0] );
-		exit ( EXIT_FAILURE );
-	  }
-	  
-	  cote = atoi ( argv[3] );
-	  if ( cote%2 != 1 ) { 
-		fprintf ( stderr, "Le cote de la fenetre doit etre impair\n" );
-		exit ( EXIT_FAILURE );
-	  }
 			 
 	  imSource = lireImage ( argv[1] );
 
@@ -27,7 +18,7 @@ int main ( int argc, char *argv[] )
 	  usleep ( 10000 );
 	  afficherImage ( ecran, &imSource );
 	  sleep ( 1 );
-	  comparaison(imSource,banqueDeDonnees,ecran);
+	  comparaison(imSource, banqueDeDonnees, banqueDeDonneeAsso, ecran);
 	  sleep ( 3 );
 	  printf ( "\nEcriture fichier...\n" );
 	  ecrireImage ( imDest, argv[2] );
