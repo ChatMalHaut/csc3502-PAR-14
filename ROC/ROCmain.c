@@ -1,3 +1,7 @@
+#include<stdlib.h>
+#include<stdio.h>
+#include 'testReconnaissance_v2.h'
+
 int main ( int argc, char *argv[] ) 
 	{
 	  Image imSource,imDest;

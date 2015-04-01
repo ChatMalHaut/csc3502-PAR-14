@@ -1,7 +1,7 @@
 #ifndef _TESTRECONNAISSANCEV2_H
 #define _TESTRECONNAISSANCEV2_H 1
 
-#include NB_LETTRES 26;
+#define NB_LETTRES 26;
 
 void comparaison(Image imSource, int banqueDeDonnees[][],char banqueDeDonneeAsso, Ecran ecran);
 void decoupageCadre(Image imLettre,Image tabImages[], int cote);
