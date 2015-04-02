@@ -6,7 +6,7 @@
 
 
 void comparaison(Image imSource, int banqueDeDonnees[NB_DECOUP][NB_LETTRES],char banqueDeDonneeAsso[NB_LETTRES], Ecran ecran);
-void decoupageCadre(Image imLettre,Image tabImages[NB_DECOUP], int cote);
+void decoupageCadre(Image imLettre,Image tabImages[NB_DECOUP]);
 void remplirCadre(Image tabImages[NB_DECOUP], Image imSecante , int cadre, Image imLettre);
 int trouverProportion(Image petitCarre);
 void initTab(int tab[],int borne, int valeur);

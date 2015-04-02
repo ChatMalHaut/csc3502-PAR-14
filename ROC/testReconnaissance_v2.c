@@ -25,22 +25,22 @@ void comparaison(Image imSource, int banqueDeDonnees[NB_DECOUP][NB_LETTRES],char
 	  
   for(i=0;i<=NB_DECOUP-1;i++)
     {
-      tabProp[i]=trouverProportion(tabImage[i]);
+      tabProp[i]=trouverProportion(tabImages[i]);
     }
 
-  lettre=trouverLettre(tabProp,banqueDeDonnees,banqueDeDonneeAsso,ecran);
+  lettre=trouverLettre(tabProp,banqueDeDonnees,banqueDeDonneeAsso,imSource,ecran);
   printf("%c",&lettre);
 }
 
 
 //La fontion qui va découper le cadre de l'image en 16
 
-void decoupageCadre(Image imLettre,Image tabImages[NB_DECOUP], int cote)
+void decoupageCadre(Image imLettre,Image tabImages[NB_DECOUP])
 {
   int j=0;
   int i=0;
   // Initialisation des Images
-  for (i=0;i<=NB_DECOUP-1)
+  for (i=0;i<=NB_DECOUP-1;i++)
     {
       tabImages[i].nbLines = (imLettre.nbLines)/4;					// Il reste à gérer le cas ou nbLines n'est pas divisible par 4.
       tabImages[i].nbColumns = (imLettre.nbColumns)/4;
@@ -56,6 +56,8 @@ void remplirCadre(Image tabImages[NB_DECOUP], Image imSecante , int cadre, Image
 {
   int temp1 =0;
   int temp2=0;
+  int i=0;
+  int j=0;
 		
   if (cadre <= 3 )													// Les temp1  et temp2 vont permettre de situer imSecante dans imLettre.
     {
@@ -122,7 +124,7 @@ int trouverProportion(Image petitCarre)
     {	
       for(j=0;j<petitCarre.nbColumns;j++)
 	{
-	  if(petitCarre.Pixel[i][j]<=150)
+	  if(**(petitCarre.t2D[i][j])<=150)
 	    {
 	      pNoirs++;
 	    }
