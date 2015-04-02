@@ -12,8 +12,8 @@ int trouverProportion(Image petitCarre);
 void initTab(int tab[],int borne, int valeur);
 void correspondances(int tab[], int compteur[]);
 void maxTab(int tab[], int borne, int *max, int *nb);
-int choixFinal(int compteur, int max, Ecran ecran, Image imSource, int bDDAssos[]);
-int choixLettre (int tab[], int bDD[NB_DECOUP][NB_LETTRES], char bDDAssos[NB_LETTRES], Image imLettre);
+int choixFinal(int compteur[], int max, Ecran ecran, Image imSource, char bDDAssos[]);
+int choixLettre (int tab[], int bDD[NB_DECOUP][NB_LETTRES], char bDDAssos[NB_LETTRES], Image imLettre, Ecran ecran);
 char trouverLettre(int tabProp[],int bDD[NB_DECOUP][NB_LETTRES], char bDDAssos[NB_LETTRES], Image imLettre,Ecran ecran);
 
 #endif

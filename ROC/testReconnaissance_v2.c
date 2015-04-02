@@ -29,7 +29,7 @@ void comparaison(Image imSource, int banqueDeDonnees[NB_DECOUP][NB_LETTRES],char
     }
 
   lettre=trouverLettre(tabProp,banqueDeDonnees,banqueDeDonneeAsso,imSource,ecran);
-  printf("%c",&lettre);
+  printf("%c",lettre);
 }
 
 
@@ -66,7 +66,7 @@ void remplirCadre(Image tabImages[NB_DECOUP], Image imSecante , int cadre, Image
 	{
 	  for (j=0; j<= imSecante.nbColumns-1;j++)					
 	    {
-	      imSecante->t2D[i][j]= imLettre->t2D[i][temp1 + j];
+	      **(imSecante.t2D[i][j])= imLettre->t2D[i][temp1 + j];
 	    }
 						
 	}
@@ -154,7 +154,7 @@ char trouverLettre(int tabProp[NB_DECOUP],int bDD[NB_DECOUP][NB_LETTRES], char b
 	      ecartMinimal = ecartActuel;
 	      lettreProche[prop]=lettre;
 	    }
-	  else if (ecartActuel=ecartMinimal)
+	  else if (ecartActuel==ecartMinimal)
 	    {
 	      lettreProche[prop]= lettreProche[prop]*29 + lettre ; // En utilisant *1000 on risque un dépassement de mémoire 
 	    }
@@ -169,7 +169,7 @@ char trouverLettre(int tabProp[NB_DECOUP],int bDD[NB_DECOUP][NB_LETTRES], char b
 
 
 
-int choixLettre (int tab[], int bDD[NB_DECOUP][NB_LETTRES], char bDDAssos[NB_LETTRES], Image imLettre)
+int choixLettre (int tab[], int bDD[NB_DECOUP][NB_LETTRES], char bDDAssos[NB_LETTRES], Image imLettre,Ecran ecran)
 {
   //----------------------------------------------
   int compteur[NB_LETTRES];
@@ -194,14 +194,12 @@ int choixLettre (int tab[], int bDD[NB_DECOUP][NB_LETTRES], char bDDAssos[NB_LET
 
   if(choix!=1)
     {
-      return(choixFinal(compteur, max, ecran, imLettre, bDDAssos));     
+      return(choixFinal(compteur, max, ecran, imLettre, bDDAssos));
     }
   else
     {
       return(max);
     }
-	    
-  //-----------------------------------------------
 }
 
 
@@ -246,8 +244,8 @@ void correspondances(int tab[], int compteur[])
 void maxTab(int tab[], int borne, int *max, int *nb)
 {
   int i=0;
+  int choix=1;
   *max=tab[0];
-  choix=1;
   for(i=1;i<borne;i++)
     {
       if(*max<tab[i])
@@ -255,7 +253,7 @@ void maxTab(int tab[], int borne, int *max, int *nb)
 	  *max=tab[i];
 	  *choix=1;
 	}
-      else if(*max=tab[i])
+      else if(*max==tab[i])
 	{
 	  *max=tab[i];
 	  *choix=choix+1;
@@ -263,7 +261,7 @@ void maxTab(int tab[], int borne, int *max, int *nb)
     }
 }
 
-int choixFinal(int compteur, int max, Ecran ecran, Image imSource, int bDDAssos[NB_LETTRES]){
+int choixFinal(int compteur[], int max, Ecran ecran, Image imSource, char bDDAssos[NB_LETTRES]){
   int i=0;
   int j=0;
   int casMultiple[NB_LETTRES];
@@ -271,15 +269,15 @@ int choixFinal(int compteur, int max, Ecran ecran, Image imSource, int bDDAssos[
   char uChoix;
   for(j=0;j<NB_LETTRES;j++)
     {
-      if(compteur[j]==max)
+      if((compteur[j])==max)
 	{
-	  casMutliple[i]=j;
+	  casMultiple[i]=j;
 	  i++;
 	}
     }
   casMultiple[i]=666;
-  printf("Oups, nous n'avons pas trouvé quelle est cette lettre :")
-    afficherImage(ecran,&imLettre);
+  printf("Oups, nous n'avons pas trouvé quelle est cette lettre :");
+  afficherImage(ecran,&imLettre);
   printf("laquelle est-ce ?");
   j=0;
   while(casMultiple[j]!=666);
