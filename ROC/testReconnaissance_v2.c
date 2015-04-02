@@ -6,17 +6,24 @@
 #include "tab2Ddynamique.h"
 #include "testReconnaissance_v2.h"
 
-//La fonction qui va comparer l'image à la lettre
-void comparaison(Image imSource, int banqueDeDonnees[][],char banqueDeDonneeAsso, Ecran ecran)
+
+
+
+/*La fonction qui va comparer l'image à la lettre BanqueDeDonnees est 
+un tableau à deux dimensions de 16 lignes 
+(les 16 proportions des lettres de l'unicode) et de 26 colonnes
+pour le moment (les 26 lettre de l'alphabet tirées de l'unicode.) */
+
+void comparaison(Image imSource, int banqueDeDonnees[NB_DECOUP][NB_LETTRES],char banqueDeDonneeAsso[NB_LETTRES], Ecran ecran)
 {
-  int tabProp[16];
-  Image tabImages[16];
+  int tabProp[NB_DECOUP];
+  Image tabImages[NB_DECOUP];
   int i=0;
   char lettre;
 
   decoupageCadre(imSource, tabImages);
 	  
-  for(i=0;i<=15;i++)
+  for(i=0;i<=NB_DECOUP-1;i++)
     {
       tabProp[i]=trouverProportion(tabImage[i]);
     }
@@ -28,24 +35,24 @@ void comparaison(Image imSource, int banqueDeDonnees[][],char banqueDeDonneeAsso
 
 //La fontion qui va découper le cadre de l'image en 16
 
-void decoupageCadre(Image imLettre,Image tabImages[], int cote)
+void decoupageCadre(Image imLettre,Image tabImages[NB_DECOUP], int cote)
 {
   int j=0;
   int i=0;
   // Initialisation des Images
-  for (i=0;i<=15)
+  for (i=0;i<=NB_DECOUP-1)
     {
       tabImages[i].nbLines = (imLettre.nbLines)/4;					// Il reste à gérer le cas ou nbLines n'est pas divisible par 4.
-      tabImages[i].nbColumns = (imLettre.nbColumnsl)/4;
+      tabImages[i].nbColumns = (imLettre.nbColumns)/4;
     }
-  for (j=0;j<=15;j++)
+  for (j=0;j<=NB_DECOUP-1;j++)
     {
       remplirCadre(tabImages, tabImages[j], j, imLettre);
     }
 }
 		
 // Remplissage des Images de tabImages
-void remplirCadre(Image tabImages[], Image imSecante , int cadre, Image imLettre)	
+void remplirCadre(Image tabImages[NB_DECOUP], Image imSecante , int cadre, Image imLettre)	
 {
   int temp1 =0;
   int temp2=0;
@@ -125,16 +132,16 @@ int trouverProportion(Image petitCarre)
   return(pNoirs/(petitCarre.nbLines * petitCarre.nbColumns));
 }
 
-char trouverLettre(int tabProp[],int bDD[][], char bDDAssos[], Image imLettre,Ecran ecran)
+char trouverLettre(int tabProp[NB_DECOUP],int bDD[NB_DECOUP][NB_LETTRES], char bDDAssos[NB_LETTRES], Image imLettre, Ecran ecran)
 {
   int prop=0;
   int lettre=0;
   int ecartMinimal;
   int ecartActuel;
-  int lettreProche[16];
+  int lettreProche[NB_DECOUP];
   int caractere;
-  initTab(lettreProche,16,0);
-  for(prop=0;prop<16;prop++)
+  initTab(lettreProche,NB_DECOUP,0);
+  for(prop=0;prop<NB_DECOUP;prop++)
     {
       ecartMinimal = fabs(tabProp[prop]-bDD[prop][0]);
       for(lettre=1;lettre<=NB_LETTRES;lettre++)
@@ -152,7 +159,7 @@ char trouverLettre(int tabProp[],int bDD[][], char bDDAssos[], Image imLettre,Ec
 	}
     }
 
-  caractere = choixLettre(lettreProche, bDD[][], bDDAssos[], imLettre); // Va donner la colonne de bDD correspondant à la bonnne lettre.
+  caractere = choixLettre(lettreProche, bDD, bDDAssos, imLettre); // Va donner la colonne de bDD correspondant à la bonnne lettre.
   return bDDAssos[caractere];
 }
 
@@ -160,7 +167,7 @@ char trouverLettre(int tabProp[],int bDD[][], char bDDAssos[], Image imLettre,Ec
 
 
 
-int choixLettre (int tab[], int bDD[][], char bDDAssos[], Image imLettre)
+int choixLettre (int tab[], int bDD[NB_DECOUP][NB_LETTRES], char bDDAssos[NB_LETTRES], Image imLettre)
 {
   //----------------------------------------------
   int compteur[NB_LETTRES];
@@ -254,7 +261,7 @@ void maxTab(int tab[], int borne, int *max, int *nb)
     }
 }
 
-int choixFinal(int compteur, int max, Ecran ecran, Image imSource, int bDDAssos[]){
+int choixFinal(int compteur, int max, Ecran ecran, Image imSource, int bDDAssos[NB_LETTRES]){
   int i=0;
   int j=0;
   int casMultiple[NB_LETTRES];
