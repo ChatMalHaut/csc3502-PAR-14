@@ -161,7 +161,7 @@ char trouverLettre(int tabProp[NB_DECOUP],int bDD[NB_DECOUP][NB_LETTRES], char b
 	}
     }
 
-  caractere = choixLettre(lettreProche, bDD, bDDAssos, imLettre); // Va donner la colonne de bDD correspondant à la bonnne lettre.
+  caractere = choixLettre(lettreProche, bDD, bDDAssos, imLettre, ecran); // Va donner la colonne de bDD correspondant à la bonnne lettre.
   return bDDAssos[caractere];
 }
 
@@ -169,7 +169,7 @@ char trouverLettre(int tabProp[NB_DECOUP],int bDD[NB_DECOUP][NB_LETTRES], char b
 
 
 
-int choixLettre (int tab[], int bDD[NB_DECOUP][NB_LETTRES], char bDDAssos[NB_LETTRES], Image imLettre,Ecran ecran)
+int choixLettre (int tab[], int bDD[NB_DECOUP][NB_LETTRES], char bDDAssos[NB_LETTRES], Image imLettre, Ecran ecran)
 {
   //----------------------------------------------
   int compteur[NB_LETTRES];
@@ -241,10 +241,10 @@ void correspondances(int tab[], int compteur[])
 }
 
 
-void maxTab(int tab[], int borne, int *max, int *nb)
+void maxTab(int tab[], int borne, int *max, int *choix)
 {
   int i=0;
-  int choix=1;
+  *choix=1;
   *max=tab[0];
   for(i=1;i<borne;i++)
     {
@@ -277,7 +277,7 @@ int choixFinal(int compteur[], int max, Ecran ecran, Image imSource, char bDDAss
     }
   casMultiple[i]=666;
   printf("Oups, nous n'avons pas trouvé quelle est cette lettre :");
-  afficherImage(ecran,&imLettre);
+  afficherImage(ecran,&imSource);
   printf("laquelle est-ce ?");
   j=0;
   while(casMultiple[j]!=666);
